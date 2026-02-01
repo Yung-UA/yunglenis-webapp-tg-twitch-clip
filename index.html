@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Додати Кліп</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title-with-logo">
+                <img src="logo.png" alt="Logo" class="logo" id="logo" onerror="this.src='logo.png'">
+                <h1>🎬 Додати Кліп</h1>
+            </div>
+            <p class="subtitle">Поділіться своїм улюбленим відео</p>
+        </div>
+
+        <form id="clipForm" class="clip-form">
+            <!-- Поле для посилання на кліп -->
+            <div class="form-group">
+                <label for="clipUrl">
+                    <span class="icon">🔗</span>
+                    <span>Посилання на кліп</span>
+                    <span class="required">*</span>
+                </label>
+                <input
+                    type="url"
+                    id="clipUrl"
+                    name="clipUrl"
+                    placeholder="https://www.twitch.tv/..."
+                    required
+                    autocomplete="off"
+                >
+                <span class="error-message" id="clipUrlError"></span>
+            </div>
+
+            <!-- Поле для опису відео -->
+            <div class="form-group">
+                <label for="description">
+                    <span class="icon">📝</span>
+                    <span>Опис відео</span>
+                    <span class="required">*</span>
+                </label>
+                <div class="textarea-wrapper">
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Опишіть що відбувається в кліпі..."
+                        required
+                        maxlength="500"
+                        rows="4"
+                    ></textarea>
+                    <span class="char-counter">
+                        <span id="charCount">0</span>/500
+                    </span>
+                </div>
+                <span class="error-message" id="descriptionError"></span>
+            </div>
+
+            <!-- Поле для Twitch нікнейму (опціональне) -->
+            <div class="form-group">
+                <label for="twitchUsername">
+                    <span class="icon">👤</span>
+                    <span>Ваш Twitch нікнейм</span>
+                    <span class="optional">(необов'язково)</span>
+                </label>
+                <input
+                    type="text"
+                    id="twitchUsername"
+                    name="twitchUsername"
+                    placeholder="dodomask"
+                    autocomplete="off"
+                    maxlength="25"
+                >
+                <span class="error-message" id="twitchUsernameError"></span>
+            </div>
+
+            <!-- Кнопка відправки (для локального тестування) -->
+            <button type="submit" class="submit-button" id="submitButton">
+                Надіслати кліп
+            </button>
+
+            <!-- Стан завантаження -->
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p>Надсилаю...</p>
+            </div>
+
+            <!-- Повідомлення про статус -->
+            <div class="status-message" id="statusMessage"></div>
+        </form>
+
+        <div class="footer">
+            <p class="hint">💡 Всі поля з зірочкою (*) обов'язкові</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

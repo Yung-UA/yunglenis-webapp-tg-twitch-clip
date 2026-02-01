@@ -1,0 +1,583 @@
+/* Скидання стилів та базові налаштування */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Темна палітра кольорів */
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+
+    /* Градієнтні акценти */
+    --accent-primary: #7b2cbf;
+    --accent-secondary: #5a189a;
+    --accent-glow: #9d4edd;
+    --accent-blue: #4361ee;
+
+    /* Текстові кольори */
+    --text-primary: #ffffff;
+    --text-secondary: #b8b8d1;
+    --text-muted: #6b6b8c;
+
+    /* Стани */
+    --success: #06ffa5;
+    --error: #ff006e;
+    --warning: #ffbe0b;
+
+    /* Тіні та світіння */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --glow: 0 0 20px rgba(157, 78, 221, 0.4);
+    --glow-intense: 0 0 30px rgba(157, 78, 221, 0.6);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Анімований градієнтний фон */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(123, 44, 191, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(67, 97, 238, 0.15) 0%, transparent 50%);
+    animation: gradientShift 15s ease infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* Анімовані частинки на фоні */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle, rgba(157, 78, 221, 0.3) 1px, transparent 1px),
+        radial-gradient(circle, rgba(67, 97, 238, 0.2) 1px, transparent 1px);
+    background-size: 50px 50px, 80px 80px;
+    background-position: 0 0, 40px 60px;
+    animation: particlesFloat 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+@keyframes particlesFloat {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+/* Контейнер */
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Заголовок */
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Логотип поруч з заголовком */
+.title-with-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 8px;
+    animation: logoEntrance 1s ease-out;
+}
+
+@keyframes logoEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-180deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(10deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent-glow);
+    box-shadow: var(--glow), 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: logoPulse 3s ease-in-out infinite;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+@keyframes logoPulse {
+    0%, 100% {
+        box-shadow: var(--glow), 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow: var(--glow-intense), 0 6px 24px rgba(157, 78, 221, 0.4);
+    }
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(5deg);
+    cursor: pointer;
+}
+
+.title-with-logo h1 {
+    margin: 0;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent-glow), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: var(--glow);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* Форма */
+.clip-form {
+    background: rgba(22, 33, 62, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Світлова смуга що рухається по формі */
+.clip-form::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        transparent 40%,
+        rgba(157, 78, 221, 0.1) 45%,
+        rgba(157, 78, 221, 0.2) 50%,
+        rgba(157, 78, 221, 0.1) 55%,
+        transparent 60%,
+        transparent
+    );
+    animation: formShine 8s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes formShine {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Група полів форми */
+.form-group {
+    margin-bottom: 24px;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.form-group:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.form-group:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.form-group:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Мітки */
+label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+.required {
+    color: var(--error);
+    font-weight: 700;
+}
+
+.optional {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* Поля введення */
+input[type="url"],
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(15, 52, 96, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input[type="url"]::placeholder,
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Фокус на полях */
+input[type="url"]:focus,
+input[type="text"]:focus,
+textarea:focus {
+    background: rgba(15, 52, 96, 0.6);
+    border-color: var(--accent-primary);
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+}
+
+/* Стан валідності */
+input.valid,
+textarea.valid {
+    border-color: var(--success);
+    box-shadow: 0 0 15px rgba(6, 255, 165, 0.2);
+}
+
+input.invalid,
+textarea.invalid {
+    border-color: var(--error);
+    box-shadow: 0 0 15px rgba(255, 0, 110, 0.2);
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+/* Textarea */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.textarea-wrapper {
+    position: relative;
+}
+
+.char-counter {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    background: rgba(26, 26, 46, 0.8);
+    padding: 4px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+#charCount {
+    color: var(--accent-glow);
+    font-weight: 600;
+}
+
+/* Повідомлення про помилки */
+.error-message {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--error);
+    min-height: 18px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.error-message:not(:empty) {
+    opacity: 1;
+}
+
+/* Кнопка відправки */
+.submit-button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 8px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-blue));
+    border: none;
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.submit-button:hover::before {
+    left: 100%;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow), var(--shadow-lg);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Ховаємо кнопку в Telegram (там використовується MainButton) */
+.submit-button.hidden {
+    display: none;
+}
+
+/* Індикатор завантаження */
+.loading-indicator {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.loading-indicator.active {
+    display: block;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 12px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent-glow);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-indicator p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Повідомлення про статус */
+.status-message {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.status-message.success {
+    display: block;
+    background: rgba(6, 255, 165, 0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+.status-message.error {
+    display: block;
+    background: rgba(255, 0, 110, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+}
+
+/* Футер */
+.footer {
+    margin-top: 24px;
+    text-align: center;
+    animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.hint {
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Адаптивність для маленьких екранів */
+@media (max-width: 480px) {
+    .container {
+        padding: 16px;
+    }
+
+    .clip-form {
+        padding: 20px;
+    }
+
+    .header h1 {
+        font-size: 28px;
+    }
+
+    input[type="url"],
+    input[type="text"],
+    textarea {
+        font-size: 16px; /* Запобігає zoom на iOS */
+    }
+}
+
+/* Hover ефекти для desktop */
+@media (hover: hover) {
+    input[type="url"]:hover,
+    input[type="text"]:hover,
+    textarea:hover {
+        border-color: rgba(157, 78, 221, 0.3);
+    }
+}
+
+/* Темна тема для iOS/Safari */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: var(--bg-primary);
+    }
+}
