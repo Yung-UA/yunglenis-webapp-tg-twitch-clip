@@ -172,10 +172,12 @@ function validateUrl(url) {
 function validateDescription(description) {
     const length = description.trim().length;
 
+    // Поле необов'язкове - якщо пусте, валідація проходить
     if (length === 0) {
-        return { valid: false, error: 'Поле обов\'язкове для заповнення' };
+        return { valid: true, error: '' };
     }
 
+    // Якщо заповнено, то мінімум 10 символів
     if (length < 10) {
         return { valid: false, error: `Мінімум 10 символів (зараз ${length})` };
     }
@@ -363,6 +365,11 @@ async function handleSubmit() {
             validateForm();
             loadingIndicator.classList.remove('active');
 
+            // Приховуємо клавіатуру на мобільних
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+
             if (isInTelegram) {
                 tg.MainButton.hideProgress();
             } else {
@@ -406,6 +413,34 @@ function showStatusMessage(message, type) {
     setTimeout(() => {
         statusMessage.className = 'status-message';
     }, 5000);
+}
+
+// Функція для показу легких toast повідомлень
+function showToast(message) {
+    // Створюємо toast елемент
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.textContent = message;
+
+    // Додаємо до body
+    document.body.appendChild(toast);
+
+    // Анімація появи
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    // Автоматично прибираємо через 2 секунди
+    setTimeout(() => {
+        toast.classList.remove('show');
+
+        // Видаляємо з DOM після анімації зникнення
+        setTimeout(() => {
+            if (toast.parentNode) {
+                document.body.removeChild(toast);
+            }
+        }, 300);
+    }, 2000);
 }
 
 // ========================================
@@ -468,6 +503,11 @@ form.addEventListener('submit', (e) => {
 
 // Обробка помилки завантаження логотипу
 const logo = document.getElementById('logo');
+
+// Масив логотипів для циклічної зміни
+const logoImages = ['logo.png', 'logo1.png', 'logo2.png'];
+let currentLogoIndex = 0;
+
 if (logo) {
     logo.addEventListener('error', function() {
         // Якщо логотип не знайдено, ховаємо контейнер
@@ -477,13 +517,106 @@ if (logo) {
         }
     });
 
-    // Додаємо анімацію при кліку на логотип (для fun)
+    // Циклічна зміна логотипів при кліку
     logo.addEventListener('click', function() {
+        // Анімація
         this.style.animation = 'none';
         setTimeout(() => {
             this.style.animation = 'logoEntrance 0.6s ease-out';
         }, 10);
+
+        // Вібрація
         tg.HapticFeedback.impactOccurred('light');
+
+        // Змінюємо логотип по циклу
+        currentLogoIndex = (currentLogoIndex + 1) % logoImages.length;
+        this.src = logoImages[currentLogoIndex];
+    });
+}
+
+// ========================================
+// РОЖЕВИЙ СКВАД - МЕМНА АНІМАЦІЯ
+// ========================================
+
+const squadBadge = document.getElementById('squadBadge');
+const memeMessages = [
+    'Хулі ти клікаєш? 😤',
+    'Воно не кляцається! 🙄',
+    'Та не тикай вже! 😡',
+    'Серйозно? 🤦',
+    'Припини це бака! 😠',
+    'Я ж казав - НЕ КЛЯЦАЄТЬСЯ! 💢'
+];
+let memeClickCount = 0;
+
+if (squadBadge) {
+    squadBadge.addEventListener('click', function() {
+        // Вібрація
+        tg.HapticFeedback.impactOccurred('medium');
+
+        // Shake анімація через клас (уникає конфліктів)
+        this.classList.remove('shake-once');
+        // Force reflow
+        void this.offsetWidth;
+        this.classList.add('shake-once');
+
+        // Показуємо мемне повідомлення
+        const message = memeMessages[memeClickCount % memeMessages.length];
+        showToast(message);
+
+        memeClickCount++;
+    });
+
+    // Видаляємо клас після завершення анімації
+    squadBadge.addEventListener('animationend', function(e) {
+        if (e.animationName === 'shake') {
+            this.classList.remove('shake-once');
+        }
+    });
+}
+
+// ========================================
+// ТЕМНИЙ РЕЖИМ - ЛАМПОЧКА
+// ========================================
+
+const lightBulb = document.getElementById('lightBulb');
+let isDarkMode = false;
+let darkModeTimeout = null;
+
+if (lightBulb) {
+    lightBulb.addEventListener('click', function() {
+        // Якщо вже в темному режимі, ігноруємо клік
+        if (isDarkMode) return;
+
+        // Вмикаємо темний режим
+        isDarkMode = true;
+
+        // Вібрація
+        tg.HapticFeedback.notificationOccurred('warning');
+
+        // Змінюємо лампочку на виключену
+        this.textContent = '💀';
+
+        // Додаємо темний режим
+        document.body.classList.add('dark-mode');
+
+        // Показуємо тролінговий текст
+        showStatusMessage('І нахуя ти світло виключив? 😑', 'error');
+
+        // Через 20 секунд повертаємо все назад
+        darkModeTimeout = setTimeout(() => {
+            // Повертаємо лампочку
+            lightBulb.textContent = '💡';
+
+            // Вимикаємо темний режим
+            document.body.classList.remove('dark-mode');
+
+            // Показуємо повідомлення
+            showStatusMessage('Ну нарешті! Світло повернулось 💡', 'success');
+
+            // Скидаємо прапор
+            isDarkMode = false;
+        }, 20000); // 20 секунд
     });
 }
 
@@ -496,8 +629,8 @@ setTimeout(() => {
     clipUrlInput.focus();
 }, 300);
 
-// Початкова валідація (ховає MainButton якщо форма пуста)
-validateForm();
+// Ховаємо MainButton при завантаженні (без валідації)
+updateMainButton(false);
 
 // Ініціалізація лічильника символів
 updateCharCounter();
