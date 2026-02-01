@@ -15,7 +15,7 @@
                 <h1>Чат, ви це бачили?</h1>
             </div>
             <p class="subtitle">Поділіться своїм улюбленим кліпом</p>
-            <p class="squad-badge">Cпонсор вашого настрою 💗 Рожевий Сквад 💗</p>
+            <p class="squad-badge" id="squadBadge">Cпонсор вашого настрою 💗 Рожевий Сквад 💗</p>
         </div>
 
         <form id="clipForm" class="clip-form">
@@ -42,14 +42,13 @@
                 <label for="description">
                     <span class="icon">📝</span>
                     <span>Опис відео</span>
-                    <span class="required">*</span>
+                    <span class="optional">(необов'язково)</span>
                 </label>
                 <div class="textarea-wrapper">
                     <textarea
                         id="description"
                         name="description"
                         placeholder="Опишіть що відбувається в кліпі..."
-                        required
                         maxlength="500"
                         rows="4"
                     ></textarea>
@@ -94,7 +93,7 @@
         </form>
 
         <div class="footer">
-            <p class="hint">💡 Всі поля з зірочкою (*) обов'язкові</p>
+            <p class="hint"><span id="lightBulb" class="light-bulb">💡</span> Всі поля з зірочкою (*) обов'язкові</p>
             <p class="squad-footer">Зроблено з 💗 від Рожевого Скваду</p>
         </div>
     </div>
