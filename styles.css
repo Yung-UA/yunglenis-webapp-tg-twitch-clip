@@ -108,7 +108,7 @@ body::after {
     max-width: 500px;
     margin: 0 auto;
     /* Великий фіксований відступ для панелі Telegram */
-    padding: 60px 16px 16px 16px;
+    padding: 60px 1px 16px 16px;
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -126,7 +126,7 @@ body::after {
 /* Заголовок */
 .header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     animation: fadeIn 0.8s ease-out 0.2s both;
 }
 
@@ -173,6 +173,12 @@ body::after {
     animation: logoPulse 3s ease-in-out infinite;
     transition: transform 0.3s ease;
     flex-shrink: 0;
+
+    /* Прибираємо виділення на мобільних */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
 }
 
 @keyframes logoPulse {
@@ -245,6 +251,22 @@ body::after {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 95%;
+
+    /* Робимо кліцабельним */
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease;
+}
+
+.squad-badge:active {
+    transform: scale(0.95);
+}
+
+/* Shake анімація для клацання */
+.squad-badge.shake-once {
+    animation: shake 0.5s ease-in-out;
 }
 
 @keyframes pinkPulse {
@@ -581,26 +603,20 @@ textarea {
     margin: 0;
     background: linear-gradient(135deg, #06ffa5 0%, #7b2cbf 100%);
     border: none;
-    border-radius: 20px;
+    border-radius: 0px !important;
     color: white;
     font-size: 17px;
     font-weight: 700;
+    /* Обводка через box-shadow - надійніше */
     box-shadow:
+        0 0 0 3px rgba(6, 255, 165, 0.8),
         0 8px 32px rgba(0, 0, 0, 0.6),
         0 0 60px rgba(6, 255, 165, 0.4);
     animation: successPopup 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    overflow: visible;
-}
-
-/* Окремий елемент для обводки */
-.status-message.success::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border: 3px solid rgba(6, 255, 165, 0.7);
-    border-radius: 24px;
-    pointer-events: none;
-    z-index: -1;
+    overflow: hidden;
+    /* Додаткове забезпечення округлості */
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
 }
 
 @keyframes successPopup {
@@ -651,6 +667,25 @@ textarea {
     margin: 0 0 12px 0;
 }
 
+/* Лампочка - кліцабельна */
+.light-bulb {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    transition: transform 0.2s ease;
+    font-size: 1.2em;
+}
+
+.light-bulb:hover {
+    transform: scale(1.2);
+}
+
+.light-bulb:active {
+    transform: scale(0.9);
+}
+
 .squad-footer {
     color: var(--text-secondary);
     font-size: 13px;
@@ -697,4 +732,63 @@ textarea {
     body {
         background: var(--bg-primary);
     }
+}
+
+/* ========================================
+   ТЕМНИЙ РЕЖИМ - ЛАМПОЧКА
+   ======================================== */
+
+body.dark-mode {
+    background: #000000 !important;
+    transition: background 1s ease-in-out, filter 1s ease-in-out;
+}
+
+body.dark-mode::before {
+    opacity: 0 !important;
+}
+
+body.dark-mode .container {
+    filter: brightness(0.3);
+    transition: filter 1s ease-in-out;
+}
+
+body.dark-mode .status-message {
+    filter: brightness(1) !important;
+    z-index: 9999;
+    position: relative;
+}
+
+/* ========================================
+   TOAST ПОВІДОМЛЕННЯ
+   ======================================== */
+
+.toast-message {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    z-index: 10001;
+
+    /* Стилі */
+    background: rgba(255, 0, 110, 0.95);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow:
+        0 4px 20px rgba(255, 0, 110, 0.4),
+        0 0 40px rgba(255, 0, 110, 0.2);
+    backdrop-filter: blur(10px);
+
+    /* Анімація */
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
