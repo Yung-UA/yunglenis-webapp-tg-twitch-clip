@@ -3,7 +3,7 @@
 // ========================================
 
 // ВАЖЛИВО: Вставте сюди URL вашого N8N webhook
-const N8N_WEBHOOK_URL = 'https://n8n.yunglenis.com/webhook-test/9c5e7b3d-fe10-4f9d-afd9-bc88bc8317df';
+const N8N_WEBHOOK_URL = 'https://n8n.yunglenis.com/webhook/9c5e7b3d-fe10-4f9d-afd9-bc88bc8317df';
 
 // ========================================
 // ІНІЦІАЛІЗАЦІЯ TELEGRAM WEB APP
