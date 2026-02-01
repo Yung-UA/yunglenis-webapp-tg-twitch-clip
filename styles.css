@@ -107,7 +107,7 @@ body::after {
     z-index: 1;
     max-width: 500px;
     margin: 0 auto;
-    padding: 16px;
+    padding: 60px 16px 16px 16px; /* Відступ зверху для кнопки Telegram */
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -538,32 +538,7 @@ textarea {
     text-align: center;
 }
 
-/* Поп-ап успіху по центру екрану */
-.status-message.success {
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    min-width: 300px;
-    max-width: 90%;
-    padding: 32px 24px;
-    margin: 0;
-    background: linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(123, 44, 191, 0.95));
-    backdrop-filter: blur(20px);
-    border: 3px solid #06ffa5;
-    border-radius: 24px;
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    box-shadow:
-        0 0 60px rgba(6, 255, 165, 0.6),
-        0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: successPopup 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* Темний фон позаду поп-апу */
+/* Темний фон під поп-апом (окремий елемент) */
 .status-message.success::before {
     content: '';
     position: fixed;
@@ -571,10 +546,36 @@ textarea {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
     z-index: -1;
     animation: fadeIn 0.3s ease;
+}
+
+/* Поп-ап успіху по центру екрану */
+.status-message.success {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    min-width: 300px;
+    max-width: 90%;
+    padding: 28px 24px;
+    margin: 0;
+    background: linear-gradient(135deg, #06ffa5 0%, #7b2cbf 100%);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    box-shadow:
+        0 0 0 3px rgba(6, 255, 165, 0.5),
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(6, 255, 165, 0.4);
+    animation: successPopup 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow: visible;
 }
 
 @keyframes successPopup {
