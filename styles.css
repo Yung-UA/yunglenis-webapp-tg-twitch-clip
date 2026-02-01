@@ -107,11 +107,8 @@ body::after {
     z-index: 1;
     max-width: 500px;
     margin: 0 auto;
-    /* Safe area для Telegram через JavaScript API */
-    padding-top: var(--safe-area-top, 100px); /* Fallback 100px якщо JS не встановив */
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 16px;
+    /* Великий фіксований відступ для панелі Telegram */
+    padding: 120px 16px 16px 16px;
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -197,7 +194,7 @@ body::after {
 }
 
 .header h1 {
-    font-size: clamp(14px, 6vw, 32px);
+    font-size: 28px; /* Фіксований розмір для мобільних */
     font-weight: 700;
     margin-bottom: 8px;
     background: linear-gradient(135deg, var(--accent-glow), var(--accent-blue));
@@ -209,6 +206,20 @@ body::after {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+}
+
+/* Для дуже вузьких екранів зменшуємо */
+@media (max-width: 360px) {
+    .header h1 {
+        font-size: 22px;
+    }
+}
+
+/* Для широких екранів збільшуємо */
+@media (min-width: 480px) {
+    .header h1 {
+        font-size: 32px;
+    }
 }
 
 .subtitle {
