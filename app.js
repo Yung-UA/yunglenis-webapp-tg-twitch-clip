@@ -3,7 +3,7 @@
 // ========================================
 
 // ВАЖЛИВО: Вставте сюди URL вашого N8N webhook
-const N8N_WEBHOOK_URL = 'https://n8n.yunglenis.com/webhook/9c5e7b3d-fe10-4f9d-afd9-bc88bc8317df';
+const N8N_WEBHOOK_URL = 'https://n8n.yunglenis.com/webhook-test/9c5e7b3d-fe10-4f9d-afd9-bc88bc8317df';
 
 // ========================================
 // ІНІЦІАЛІЗАЦІЯ TELEGRAM WEB APP
@@ -119,14 +119,35 @@ function parseTwitchUrl(url) {
 // ВАЛІДАЦІЯ
 // ========================================
 
+// Функція для автоматичного витягування URL з тексту
+function extractUrlFromText(text) {
+    // Шукаємо URL в тексті (може бути з текстом перед ним)
+    const urlPattern = /(https?:\/\/[^\s]+)/;
+    const match = text.match(urlPattern);
+
+    if (match) {
+        return match[1].trim();
+    }
+
+    return text.trim();
+}
+
 // Функція для валідації URL
 function validateUrl(url) {
     if (!url.trim()) {
         return { valid: false, error: 'Поле обов\'язкове для заповнення' };
     }
 
+    // Автоматично витягуємо URL якщо є зайвий текст
+    const cleanUrl = extractUrlFromText(url);
+
+    // Якщо URL відрізняється від введеного тексту, оновлюємо поле
+    if (cleanUrl !== url) {
+        clipUrlInput.value = cleanUrl;
+    }
+
     // Парсимо Twitch URL
-    const parsedUrl = parseTwitchUrl(url);
+    const parsedUrl = parseTwitchUrl(cleanUrl);
 
     if (!parsedUrl.isValid) {
         return { valid: false, error: parsedUrl.error };
@@ -332,24 +353,30 @@ async function handleSubmit() {
         tg.HapticFeedback.notificationOccurred('success');
 
         // Показуємо повідомлення про успіх
-        showStatusMessage('Кліп успішно надіслано!', 'success');
+        showStatusMessage('✨ Кліп успішно додано! Можете додати ще один 💗', 'success');
 
-        // Закриваємо Web App через 1.5 секунди (тільки в Telegram)
-        if (isInTelegram) {
-            setTimeout(() => {
-                tg.close();
-            }, 1500);
-        } else {
-            // Локально просто скидаємо форму
-            setTimeout(() => {
-                form.reset();
-                extractedStreamerName = null;
-                updateCharCounter();
-                validateForm();
-                loadingIndicator.classList.remove('active');
+        // Скидаємо форму після успіху (не закриваємо додаток!)
+        setTimeout(() => {
+            form.reset();
+            extractedStreamerName = null;
+            updateCharCounter();
+            validateForm();
+            loadingIndicator.classList.remove('active');
+
+            if (isInTelegram) {
+                tg.MainButton.hideProgress();
+            } else {
                 submitButton.textContent = 'Надіслати кліп';
-            }, 2000);
-        }
+            }
+
+            // Ховаємо повідомлення про успіх через 3 секунди
+            setTimeout(() => {
+                statusMessage.className = 'status-message';
+            }, 3000);
+
+            // Фокус на першому полі для швидкого додавання наступного кліпу
+            clipUrlInput.focus();
+        }, 1500);
 
     } catch (error) {
         console.error('Помилка відправки:', error);
