@@ -170,21 +170,6 @@ function validateUrl(url) {
 
 // Функція для валідації опису
 function validateDescription(description) {
-    const length = description.trim().length;
-
-    // Поле необов'язкове - якщо пусте, валідація проходить
-    if (length === 0) {
-        return { valid: true, error: '' };
-    }
-
-    // Якщо заповнено, то мінімум 10 символів
-    if (length < 10) {
-        return { valid: false, error: `Мінімум 10 символів (зараз ${length})` };
-    }
-
-    if (length > 500) {
-        return { valid: false, error: `Максимум 500 символів (зараз ${length})` };
-    }
 
     return { valid: true, error: '' };
 }
@@ -535,16 +520,38 @@ form.addEventListener('submit', (e) => {
 // ЛОГОТИП
 // ========================================
 
-// Обробка помилки завантаження логотипу
+// Обробка логотипу
 const logo = document.getElementById('logo');
-
-// Масив логотипів для циклічної зміни
-const logoImages = ['logo.png', 'logo1.png', 'logo2.png'];
+const logoImages = [];
 let currentLogoIndex = 0;
+
+// Автоматичне виявлення всіх логотипів в папці img/
+// Пробуємо logo.png, logo1.png, logo2.png, ... поки не буде 404
+async function discoverLogos() {
+    // Перший завжди logo.png (без цифри)
+    const names = ['img/logo.png'];
+    let i = 1;
+    while (true) {
+        const path = `img/logo${i}.png`;
+        try {
+            const res = await fetch(path, { method: 'HEAD' });
+            if (!res.ok) break;
+            names.push(path);
+            i++;
+        } catch {
+            break;
+        }
+    }
+    return names;
+}
+
+discoverLogos().then(found => {
+    logoImages.push(...found);
+    console.log(`🖼️ Знайдено ${logoImages.length} логотипів:`, logoImages);
+});
 
 if (logo) {
     logo.addEventListener('error', function() {
-        // Якщо логотип не знайдено, ховаємо контейнер
         const logoContainer = this.parentElement;
         if (logoContainer) {
             logoContainer.style.display = 'none';
@@ -553,6 +560,8 @@ if (logo) {
 
     // Циклічна зміна логотипів при кліку
     logo.addEventListener('click', function() {
+        if (logoImages.length <= 1) return;
+
         // Анімація
         this.style.animation = 'none';
         setTimeout(() => {
