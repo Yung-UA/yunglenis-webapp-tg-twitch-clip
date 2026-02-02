@@ -784,7 +784,7 @@ body.dark-mode .status-message {
     opacity: 0;
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     pointer-events: none;
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - 16px);
     text-align: center;
     box-sizing: border-box;
 }
