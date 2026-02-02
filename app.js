@@ -321,6 +321,9 @@ async function handleSubmit() {
         submitButton.textContent = 'Надсилаю...';
     }
 
+    // Отримуємо дані користувача Telegram
+    const tgUser = tg.initDataUnsafe?.user || {};
+
     // Збираємо дані з форми
     const formData = {
         clip_url: clipUrlInput.value.trim(),
@@ -328,14 +331,17 @@ async function handleSubmit() {
         twitch_username: twitchUsernameInput.value.trim() || null,
         streamer_name: extractedStreamerName, // Автоматично витягнутий нікнейм стрімера
         telegram_user: {
-            id: tg.initDataUnsafe?.user?.id || null,
-            username: tg.initDataUnsafe?.user?.username || null,
-            first_name: tg.initDataUnsafe?.user?.first_name || null,
-            last_name: tg.initDataUnsafe?.user?.last_name || null,
-            language_code: tg.initDataUnsafe?.user?.language_code || null
+            id: tgUser.id || null,
+            username: tgUser.username || null,
+            first_name: tgUser.first_name || null,
+            last_name: tgUser.last_name || null,
+            language_code: tgUser.language_code || null
         },
+        init_data: tg.initData || null, // Для верифікації на сервері
         timestamp: new Date().toISOString()
     };
+
+    console.log('📤 Відправка даних:', JSON.stringify(formData, null, 2));
 
     try {
         // Відправляємо дані на N8N webhook
@@ -354,8 +360,10 @@ async function handleSubmit() {
         // Успіх!
         tg.HapticFeedback.notificationOccurred('success');
 
-        // Показуємо повідомлення про успіх
-        showStatusMessage('✨ Кліп успішно додано! Можете додати ще один 💗', 'success');
+        // Показуємо повідомлення про успіх (випадкове з масиву)
+        const message = successMessages[successMessageIndex % successMessages.length];
+        showToast(message, 'success');
+        successMessageIndex++;
 
         // Скидаємо форму після успіху (не закриваємо додаток!)
         setTimeout(() => {
@@ -416,10 +424,10 @@ function showStatusMessage(message, type) {
 }
 
 // Функція для показу легких toast повідомлень
-function showToast(message) {
+function showToast(message, type = 'error') {
     // Створюємо toast елемент
     const toast = document.createElement('div');
-    toast.className = 'toast-message';
+    toast.className = `toast-message toast-${type}`;
     toast.textContent = message;
 
     // Додаємо до body
@@ -430,7 +438,7 @@ function showToast(message) {
         toast.classList.add('show');
     }, 10);
 
-    // Автоматично прибираємо через 2 секунди
+    // Автоматично прибираємо через 4 секунди
     setTimeout(() => {
         toast.classList.remove('show');
 
@@ -440,7 +448,7 @@ function showToast(message) {
                 document.body.removeChild(toast);
             }
         }, 300);
-    }, 2000);
+    }, 4000);
 }
 
 // ========================================
@@ -549,6 +557,17 @@ const memeMessages = [
 ];
 let memeClickCount = 0;
 
+// Масив повідомлень про успіх
+const successMessages = [
+    '✨ Кліп додано! Можеш ще! 💗',
+    '🔥 Топчик! Давай ще один! 💜',
+    '⭐ Красава! Не зупиняйся! ✨',
+    '💯 Жарко! Ще будуть? 🎬',
+    '🎉 Прийнято! Чат оцінить! 💗',
+    '🚀 Летить! Додавай ще! 💜'
+];
+let successMessageIndex = 0;
+
 if (squadBadge) {
     squadBadge.addEventListener('click', function() {
         // Вібрація
@@ -601,7 +620,7 @@ if (lightBulb) {
         document.body.classList.add('dark-mode');
 
         // Показуємо тролінговий текст
-        showStatusMessage('І нахуя ти світло виключив? 😑', 'error');
+        showToast('І нахуя ти світло виключив? 😑');
 
         // Через 20 секунд повертаємо все назад
         darkModeTimeout = setTimeout(() => {
@@ -612,7 +631,7 @@ if (lightBulb) {
             document.body.classList.remove('dark-mode');
 
             // Показуємо повідомлення
-            showStatusMessage('Ну нарешті! Світло повернулось 💡', 'success');
+            showToast('⚡️ДТЕК повідомляє: електропостачання відновлено 💡', 'success');
 
             // Скидаємо прапор
             isDarkMode = false;
@@ -639,4 +658,6 @@ updateCharCounter();
 tg.ready();
 
 console.log('🚀 Telegram Web App ініціалізовано');
+console.log('📋 initData:', tg.initData ? 'є' : 'ПОРОЖНІЙ');
 console.log('👤 Користувач:', tg.initDataUnsafe?.user);
+console.log('📦 initDataUnsafe:', JSON.stringify(tg.initDataUnsafe));
