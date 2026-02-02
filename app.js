@@ -354,6 +354,32 @@ async function handleSubmit() {
         });
 
         if (!response.ok) {
+            if (response.status === 403) {
+                tg.HapticFeedback.notificationOccurred('error');
+                showToast('Вас забанено 🚫', 'error');
+                loadingIndicator.classList.remove('active');
+                if (isInTelegram) {
+                    tg.MainButton.hideProgress();
+                    tg.MainButton.enable();
+                } else {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Надіслати кліп';
+                }
+                return;
+            }
+            if (response.status === 500) {
+                tg.HapticFeedback.notificationOccurred('error');
+                showToast('Помилка сервера. Спробуй пізніше 😔', 'error');
+                loadingIndicator.classList.remove('active');
+                if (isInTelegram) {
+                    tg.MainButton.hideProgress();
+                    tg.MainButton.enable();
+                } else {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Надіслати кліп';
+                }
+                return;
+            }
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -397,7 +423,7 @@ async function handleSubmit() {
         tg.HapticFeedback.notificationOccurred('error');
 
         // Показуємо повідомлення про помилку
-        showStatusMessage('Помилка при відправці. Спробуйте ще раз.', 'error');
+        showToast('Помилка при відправці. Спробуй ще раз 😔', 'error');
 
         // Ховаємо індикатор завантаження
         loadingIndicator.classList.remove('active');
