@@ -108,7 +108,7 @@ body::after {
     max-width: 500px;
     margin: 0 auto;
     /* Великий фіксований відступ для панелі Telegram */
-    padding: 60px 1px 16px 16px;
+    padding: 60px 8px 16px 8px;
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -699,11 +699,11 @@ textarea {
 /* Адаптивність для маленьких екранів */
 @media (max-width: 480px) {
     .container {
-        padding: 60px 16px 16px 16px; /* Зберігаємо великий відступ зверху! */
+        padding: 60px 8px 16px 8px; /* Менші бокові відступи на мобільних */
     }
 
     .clip-form {
-        padding: 20px;
+        padding: 16px;
     }
 
     .header h1 {
