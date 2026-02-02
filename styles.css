@@ -764,9 +764,12 @@ body.dark-mode .status-message {
 .toast-message {
     position: fixed;
     top: 80px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100px);
-    z-index: 100000; /* Поверх всього, навіть темного режиму */
+    left: 8px;
+    right: 8px;
+    width: fit-content;
+    margin: 0 auto;
+    transform: translateY(-100px);
+    z-index: 100000;
 
     /* Стилі */
     background: rgba(255, 0, 110, 0.95);
@@ -775,9 +778,7 @@ body.dark-mode .status-message {
     border-radius: 16px;
     font-size: 14px;
     font-weight: 600;
-    box-shadow:
-        0 4px 20px rgba(255, 0, 110, 0.4),
-        0 0 40px rgba(255, 0, 110, 0.2);
+    box-shadow: 0 4px 20px rgba(255, 0, 110, 0.4);
     backdrop-filter: blur(10px);
 
     /* Анімація */
@@ -791,7 +792,7 @@ body.dark-mode .status-message {
 
 .toast-message.show {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
 }
 
 /* Success тост - великий і помітний */
